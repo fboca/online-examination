@@ -1,0 +1,55 @@
+@import url('https://fonts.googleapis.com/css?family=Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i&subset=devanagari,latin-ext');
+
+.text-left.h1  {
+    text-align: left;
+    font-family: 'Poppins', sans-serif;
+}
+.form-check-label {
+}
+.d-flex.flex-row {
+    border: 1px solid rgba(0,0,0,0.2);
+    padding: 10px;
+    border-radius: 10px;
+}
+.d-flex.flex-row:focus {
+    border: 2px solid rgba(0, 0, 0, 0.747);
+    padding: 10px;
+    border-radius: 10px;
+}
+input[type="text"] {
+
+}
+.form-check {
+    width: 350px;
+}
+label.form-label:focus {
+    color: red;
+}
+.signup_logo_brand {
+    width: 150px;
+    margin-left: 10px;
+    opacity: 0.8;
+}
+form span {
+    color: rgba(0,0,0,0.7);
+    margin-left: 5px;
+}
+
+@media (max-width: 1024px) {
+  .signup_logo_brand {
+
+  }
+}
+
+@media (max-width: 992px) {
+  
+}
+
+@media (max-width: 575px) {
+    .image-container {
+        visibility: hidden;
+    }
+    .signup_logo_brand {
+        margin-left: 0px !important;
+    }
+}

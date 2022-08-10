@@ -1,6 +1,23 @@
-# Getting Started with Create React App
+# Getting Started
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app). This project contains the client and also the server of mockbest online examination platform. This is the final version with the registration system working as intended, without any known bugs. The log out functionality has not been implemented yet (a simple function that deletes the userId cookie). 
+
+## Creating the MySQL database
+    SELECT DATABASE `mockbest_examination`;
+    CREATE TABLE `examination_platform`.`users` (
+      `userid` INT NOT NULL AUTO_INCREMENT,
+      `email` VARCHAR(320) NOT NULL,
+      `password` VARCHAR(1000) NOT NULL,
+      `displayname` VARCHAR(500) NOT NULL,
+      `profile_picture` VARCHAR(500) NULL,
+      `bio` VARCHAR(500) NULL,
+      `location` VARCHAR(500) NULL,
+      `package` INT NULL DEFAULT 1,
+      `created` DATETIME NOT NULL,
+      `last_logged_in` DATETIME NULL,
+      `last_updated` DATETIME NULL,
+      `newsletter` INT 0,
+      PRIMARY KEY (`userid`));
 
 ## Available Scripts
 
