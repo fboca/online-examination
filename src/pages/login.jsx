@@ -6,6 +6,7 @@ import '../css/signup.css'
 import { Link } from "react-router-dom";
 import GoogleLogin from "react-google-login";
 import { toast, ToastContainer } from "react-toastify";
+import mode from "../mode";
 
 export default function Login() {
     document.title = 'Mockbest - Login';
@@ -88,7 +89,7 @@ export default function Login() {
             if (password.length > 7) {
                 setLoading(true);
                 //In the end pass the data to the server
-                Axios.post("http://localhost:3001/online-examination/api/login", {
+                Axios.post(mode === 0 ? "http://localhost:3001/online-examination/api/login" : "http://examination.mockbest.com/online-examination/api/login", {
                     username: username,
                     password: password,
                 }).then((response) => {
@@ -112,7 +113,7 @@ export default function Login() {
             toast.success("Your account has been created successfully! Please login!")
         }
 
-        Axios.get("http://localhost:3001/online-examination/api/login").then((response) => {
+        Axios.get(mode === 0 ? "http://localhost:3001/online-examination/api/login" : "http://examination.mockbest.com/online-examination/api/login").then((response) => {
             if (response.data.loggedIn == true) {
                 //setLoginStatus(true);
                 window.location = '../';

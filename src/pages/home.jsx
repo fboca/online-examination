@@ -13,7 +13,7 @@ export default class Home extends React.Component {
         document.title = 'Mockbest - Home';
         Axios.defaults.withCredentials = true;
 
-        Axios.get(mode === 0 ? "http://localhost:3001/online-examination/api/login" : "https://mockbest.com:3001/online-examination/api/login").then((response) => {
+        Axios.get(mode === 0 ? "http://localhost:3001/online-examination/api/login" : "https://examination.mockbest.com/online-examination/api/login").then((response) => {
             if (response.data.loggedIn == true) {
                 //setLoginStatus(true);
                 //window.location = 'https://mockbest.com?success=1';

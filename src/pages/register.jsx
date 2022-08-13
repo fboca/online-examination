@@ -8,6 +8,7 @@ import { loadCaptchaEnginge, LoadCanvasTemplate, LoadCanvasTemplateNoReload, val
 import { BarLoader, CircleLoader, ClimbingBoxLoader, ClipLoader, SyncLoader } from "react-spinners";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import mode from "../mode";
 
 export default function Register() {
     document.title = 'Mockbest - Register';
@@ -56,7 +57,7 @@ export default function Register() {
             if (validateEmail(usernameReg)) {
                 if (passwordReg.length > 7) {
                     //In the end pass the data to the server
-                    Axios.post("http://localhost:3001/online-examination/api/register", {
+                    Axios.post(mode === 0 ? "http://localhost:3001/online-examination/api/register" : "http://examination.mockbest.com/online-examination/api/register", {
                         username: usernameReg,
                         password: passwordReg,
                         displayName: displayNameReg,
@@ -78,7 +79,7 @@ export default function Register() {
         document.querySelector('body').style = 'background-color: #eee';
         //loadCaptchaEnginge(6); WE WILL LOAD CAPTCHA AFTER PAGE 2 IS DISPLAYED
         //setTimeout(() => { loadCaptchaEnginge(6) }, 200)
-        Axios.get("http://localhost:3001/login").then((response) => {
+        Axios.get(mode === 0 ? "http://localhost:3001/online-examination/api/login" : "http://examination.mockbest.com/online-examination/api/login").then((response) => {
             if (response.data.loggedIn == true) {
                 setLoginStatus(response.data.user[0].username);
                 window.location = '/';

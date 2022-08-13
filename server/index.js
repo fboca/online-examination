@@ -53,8 +53,9 @@ app.use(expressSession({
     }
 }))
 
+let db = [];
 if (production) {
-    const db = mysql.createConnection({
+    db = mysql.createConnection({
         user: "mockbest_examination",
         host: "localhost",
         password: "BTLzBfJ7n5eDTtV",
@@ -62,14 +63,13 @@ if (production) {
     });
 }
 else {
-    const db = mysql.createConnection({
+    db = mysql.createConnection({
         user: "root", //mockbest_examination
         host: "localhost",
         password: "R5PMQXULWRHYDf8c", //BTLzBfJ7n5eDTtV
         database: "examination_platform" //mockbest_examination
     });
 }
-
 
 app.post('/online-examination/api/google-login', async (req, res) => {
     const { token } = req.body;
