@@ -4,12 +4,13 @@ import 'mdb-ui-kit/css/mdb.min.css';
 import { MdArrowRight, MdEmail, MdPassword, MdPerson } from 'react-icons/md'
 import '../css/signup.css'
 import { Link } from "react-router-dom";
-import GoogleLogin from "react-google-login";
 import { toast, ToastContainer } from "react-toastify";
 import mode from "../mode";
 
 export default function Login() {
+    //TODO: finish the settimeout with the state presenter.
     document.title = 'Mockbest - Login';
+    const google_clientId = "95619042713-f74ei4ar78dk9aina2fpg1vo4oop1n94.apps.googleusercontent.com";
 
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
@@ -49,7 +50,7 @@ export default function Login() {
         toast.error(string, {
             position: "top-right",
             autoClose: 5000,
-            hideProgressBar: false,
+            hideProgressBar: true,
             closeOnClick: true,
             pauseOnHover: true,
             draggable: true,
@@ -89,7 +90,7 @@ export default function Login() {
             if (password.length > 7) {
                 setLoading(true);
                 //In the end pass the data to the server
-                Axios.post(mode === 0 ? "http://localhost:3001/online-examination/api/login" : "http://examination.mockbest.com/online-examination/api/login", {
+                Axios.post(mode === 0 ? "http://localhost:3001/online-examination/api/login" : "https://examination.mockbest.com/online-examination/api/login", {
                     username: username,
                     password: password,
                 }).then((response) => {
@@ -99,6 +100,7 @@ export default function Login() {
                     } else {
                         //setLoginStatus(true);
                         window.location = '../?c=0';
+                        //console.log(response.data)
                     }
                 })
             } else error("Your password must be at least 8 characters long.")
@@ -108,12 +110,23 @@ export default function Login() {
     useEffect(() => {
         const queryString = window.location.search;
         const urlParams = new URLSearchParams(queryString);
+
         if (urlParams.get('new') != null) {
-            console.log("yes")
-            toast.success("Your account has been created successfully! Please login!")
+            if (urlParams.get('new') == '1') {
+                //console.log("yes")
+                toast.success("Your account has been created successfully. Please log in!", { hideProgressBar: true, toastId: 0 })
+                //message = { type: toast.success(), text: "Your account has been created successfully. Please log in!" }
+            } else {
+                toast.success("Your password has been updated successfuly. Please log in!", { hideProgressBar: true, toastId: 0 })
+            }
         }
 
-        Axios.get(mode === 0 ? "http://localhost:3001/online-examination/api/login" : "http://examination.mockbest.com/online-examination/api/login").then((response) => {
+        if (urlParams.get('id') != null && urlParams.get('id') == "100") {
+            //message = { type: toast.warning(), text: "Your account has been created successfully. Please log in!" }
+            toast.warn("You created your account using email and password so you can not use Google Authentication.", { hideProgressBar: true, toastId: 0 })
+        }
+
+        Axios.get(mode === 0 ? "http://localhost:3001/online-examination/api/login" : "https://examination.mockbest.com/online-examination/api/login").then((response) => {
             if (response.data.loggedIn == true) {
                 //setLoginStatus(true);
                 window.location = '../';
@@ -136,12 +149,11 @@ export default function Login() {
                                         <div class="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">
                                             <img className="signup_logo_brand" src="/graphics/mockbest_logo_512_200.png" />
                                             <p class="text-left h1 fw-bold mx-1 mx-md-4 mt-4">Log into your account</p>
-                                            <Link to='/register' className='mx-1 mx-md-4 mt-4'>Don't you have an account?</Link>
+                                            <a href='/register' className='mx-1 mx-md-4 mt-4'>Don't you have an account?</a>
 
                                             <form class="mx-1 mx-md-4 mt-3">
-
                                                 <span>Email address</span>
-                                                <div class="d-flex flex-row align-items-center mb-4">
+                                                <div class="d-flex flex-row align-items-center mb-2">
                                                     <MdEmail style={{ width: 20, height: 20, color: 'rgba(0,0,0,0.7)' }} />
                                                     <div class="form-outline flex-fill mb-0">
                                                         <input type="email" id="form3Example3c" class="form-control" onChange={(e) => {
@@ -159,19 +171,27 @@ export default function Login() {
                                                         }} />
                                                     </div>
                                                 </div>
-                                                {/*
-                                                <GoogleLogin
-                                                    className="mb-4 mx-4 mb-3 mb-lg-4"
-                                                    clientId={"95619042713-f74ei4ar78dk9aina2fpg1vo4oop1n94.apps.googleusercontent.com"}
-                                                    buttonText="Log in with Google"
-                                                    onSuccess={handleGoogleLogin}
-                                                    onFailure={() => { }}
-                                                    cookiePolicy={'single_host_origin'}
-                                                ></GoogleLogin>*/}
 
-                                                <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
-                                                    <button style={{ textTransform: 'none', letterSpacing: 0.4 }} type="button" class="btn btn-primary btn-lg" onClick={login}>Log In</button>
+
+                                                <div id="g_id_onload"
+                                                    data-client_id={google_clientId}
+                                                    data-login_uri={mode == 0 ? 'http://localhost:3001/online-examination/api/google-login' : 'https://examination.mockbest.com/online-examination/api/google-login'}
+                                                    data-auto_prompt="false">
                                                 </div>
+                                                <div class="g_id_signin"
+                                                    data-type="standard"
+                                                    data-size="large"
+                                                    data-theme="outline"
+                                                    data-text="sign_in_with"
+                                                    data-shape="rectangular"
+                                                    data-logo_alignment="left">
+                                                </div>
+
+
+
+                                                <button style={{ textTransform: 'none', letterSpacing: 0.4 }} type="button" class="btn-login" onClick={login}>Log in with email and password</button>
+                                                <Link to='/auth/reset-password' className='forgot-password'>Forgot your password?</Link>
+
                                             </form>
 
                                         </div>

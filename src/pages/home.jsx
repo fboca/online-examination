@@ -1,6 +1,12 @@
 import Axios from "axios";
 import React from "react";
+import Navbar from "../components/navbar";
 import mode from '../mode';
+import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
+import { Carousel } from 'react-responsive-carousel';
+import '../css/override.css'
+import '../css/home.css'
+import { MdDashboard, MdHome, MdPlayLesson, MdTableRows } from "react-icons/md";
 
 export default class Home extends React.Component {
     state = {
@@ -14,10 +20,12 @@ export default class Home extends React.Component {
         Axios.defaults.withCredentials = true;
 
         Axios.get(mode === 0 ? "http://localhost:3001/online-examination/api/login" : "https://examination.mockbest.com/online-examination/api/login").then((response) => {
+
             if (response.data.loggedIn == true) {
+                console.log(response.data.user)
                 //setLoginStatus(true);
                 //window.location = 'https://mockbest.com?success=1';
-                this.setState({ user: response.data.user[0] })
+                this.setState({ user: response.data.user[0] }) //Please verify TAG: 0
             }
         });
 
@@ -54,21 +62,33 @@ export default class Home extends React.Component {
     render() {
         console.log(this.state)
         return (
-            <div>
-                <p>Mockbest examination</p>
-                {(this.state.user != null) ? (
-                    <div>
-                        <p>You are logged in as {this.state.user.displayname} ({this.state.user.email})</p>
-                        {this.state.isFirstTime ? (<p>You are logging in for the first time!</p>) : (<></>)}
-                        {this.state.isSuccess ? (<p>Welcome back!</p>) : (<></>)}
-                        <button onClick={() => this.logOut()}>Log out</button>
-                    </div>
-                ) : (
-                    <>
-                        <p>You are not logged in.</p>
-                        <button onClick={() => window.location = "/register"}>Create an account</button>
-                    </>
-                )}
+            <div style={{ height: '100%', background: 'white' }}>
+                <Navbar />
+
+                <div className="col">
+                    <Carousel renderArrowNext={() => { }} renderArrowPrev={() => { }} showThumbs={false}>
+                        <div style={{ background: 'white', paddingLeft: 20 }}>
+                            <div class="row container">
+                                <div class="col-3">
+                                    <img src="/graphics/c-thesis-rafiki.png" />
+                                </div>
+                                <div class="col text-hero pt-3">
+                                    <h1>{this.state.user != null ? `Welcome back, ${this.state.user.displayname.split(' ')[0]}!` : "Start learning with us!"}</h1>
+                                    <div className="mt-3">
+                                        <h3>At vero eos et accusamus et iusto odio dignissimos ducimus. </h3>
+                                        <h2><MdPlayLesson /> Deleniti atque corrupti quos dolores.</h2>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <img src="/graphics/c-thesis-rafiki.png" />
+                        </div>
+                        <div>
+                            <img src="/graphics/c-thesis-rafiki.png" />
+                        </div>
+                    </Carousel>
+                </div>
             </div>
         )
     }

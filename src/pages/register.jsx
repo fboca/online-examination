@@ -12,6 +12,7 @@ import mode from "../mode";
 
 export default function Register() {
     document.title = 'Mockbest - Register';
+    const google_clientId = "95619042713-f74ei4ar78dk9aina2fpg1vo4oop1n94.apps.googleusercontent.com";
 
     const [usernameReg, setUsernameReg] = useState("");
     const [passwordReg, setPasswordReg] = useState("");
@@ -42,7 +43,7 @@ export default function Register() {
         toast.error(string, {
             position: "top-right",
             autoClose: 5000,
-            hideProgressBar: false,
+            hideProgressBar: true,
             closeOnClick: true,
             pauseOnHover: true,
             draggable: true,
@@ -57,7 +58,7 @@ export default function Register() {
             if (validateEmail(usernameReg)) {
                 if (passwordReg.length > 7) {
                     //In the end pass the data to the server
-                    Axios.post(mode === 0 ? "http://localhost:3001/online-examination/api/register" : "http://examination.mockbest.com/online-examination/api/register", {
+                    Axios.post(mode === 0 ? "http://localhost:3001/online-examination/api/register" : "https://examination.mockbest.com/online-examination/api/register", {
                         username: usernameReg,
                         password: passwordReg,
                         displayName: displayNameReg,
@@ -79,7 +80,7 @@ export default function Register() {
         document.querySelector('body').style = 'background-color: #eee';
         //loadCaptchaEnginge(6); WE WILL LOAD CAPTCHA AFTER PAGE 2 IS DISPLAYED
         //setTimeout(() => { loadCaptchaEnginge(6) }, 200)
-        Axios.get(mode === 0 ? "http://localhost:3001/online-examination/api/login" : "http://examination.mockbest.com/online-examination/api/login").then((response) => {
+        Axios.get(mode === 0 ? "http://localhost:3001/online-examination/api/login" : "https://examination.mockbest.com/online-examination/api/login").then((response) => {
             if (response.data.loggedIn == true) {
                 setLoginStatus(response.data.user[0].username);
                 window.location = '/';
@@ -159,9 +160,23 @@ export default function Register() {
                                                     <div class="col-md-10 col-lg-6">
                                                         <img className="signup_logo_brand" src="/graphics/mockbest_logo_512_200.png" />
                                                         <p class="text-left h1 fw-bold mx-1 mx-md-4 mt-4">Join us today</p>
-                                                        <Link to='/login' className='mx-1 mx-md-4 mt-4'>Already have an account?</Link>
+                                                        <a href='/login' className='mx-1 mx-md-4 mt-4'>Already have an account?</a>
 
                                                         <form class="mx-1 mx-md-4 mt-3">
+                                                            <div id="g_id_onload"
+                                                                data-client_id={google_clientId}
+                                                                data-login_uri={mode == 0 ? 'http://localhost:3001/online-examination/api/google-login' : 'https://examination.mockbest.com/online-examination/api/google-login'}
+                                                            >
+                                                            </div>
+                                                            <div class="g_id_signin"
+                                                                data-type="standard"
+                                                                data-size="large"
+                                                                data-theme="outline"
+                                                                data-text="sign_in_with"
+                                                                data-shape="rectangular"
+                                                                data-logo_alignment="left">
+                                                            </div>
+                                                            <hr />
                                                             <span>Name</span>
                                                             <div class="d-flex flex-row align-items-center mb-4">
                                                                 <MdPerson style={{ width: 20, height: 20, color: 'rgba(0,0,0,0.7)' }} />
@@ -202,12 +217,6 @@ export default function Register() {
                                                                 </div>
                                                             </div>
 
-                                                            <div class="d-flex mb-2">
-                                                                <input class="form-check-input" onChange={(e) => setNewsletter(e.target.value)} type="checkbox" value="" id="form23" />
-                                                                <label class="form-check-label" for="form23">
-                                                                    I agree receiving Mockbest newsletter via email.
-                                                                </label>
-                                                            </div>
                                                             <label class="form-check-label" onClick={() => { window.open('https://mockbest.com/privacy-policy') }}>
                                                                 <b>By clicking Continue I accept the privacy policy of Mockbest and I want to continue the registration process.</b>
                                                             </label>
@@ -215,6 +224,8 @@ export default function Register() {
                                                             <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4 mt-4">
                                                                 <button style={{ textTransform: 'none', letterSpacing: 0.4 }} type="button" class="btn btn-primary btn-lg" onClick={() => nextPage()}>Continue</button>
                                                             </div>
+
+
 
                                                         </form>
                                                     </div>

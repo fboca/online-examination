@@ -53,3 +53,20 @@ form span {
         margin-left: 0px !important;
     }
 }
+
+.btn-login {
+    width: 100%;
+    margin-top: 10px;
+    background-color: rgba(79,146,255,255);
+    border: 1px solid rgba(128, 128, 128, 0.685);
+    padding: 10px;
+    border-radius: 3px;
+    font-size: 14px;
+    color: white;
+}
+.forgot-password {
+    color: rgb(150, 150, 150);
+    text-decoration: underline;
+    font-size: small;
+    text-align: center;
+}
