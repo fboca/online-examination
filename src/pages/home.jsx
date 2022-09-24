@@ -13,6 +13,7 @@ export default class Home extends React.Component {
         user: undefined,
         isSuccess: false,
         isFirstTime: false,
+        exams: []
     };
 
     componentDidMount() {
@@ -26,6 +27,13 @@ export default class Home extends React.Component {
                 //setLoginStatus(true);
                 //window.location = 'https://mockbest.com?success=1';
                 this.setState({ user: response.data.user[0] }) //Please verify TAG: 0
+
+                //When user is logged in get exams
+                Axios.get(mode === 0 ? "http://localhost:3001/online-examination/api/exams" : "https://examination.mockbest.com/online-examination/api/exams").then((response) => {
+                    if(response.data.success) {
+                        this.setState({exams: response.data.exams})
+                    }
+                });
             }
         });
 
@@ -89,6 +97,10 @@ export default class Home extends React.Component {
                         </div>
                     </Carousel>
                 </div>
+
+                {this.state.exams.map((exam) => (
+                    <h1>{exam.title}</h1>
+                ))}
             </div>
         )
     }

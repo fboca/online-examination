@@ -1,2 +1,2 @@
-const mode = 1
+const mode = 0
 export default mode

@@ -1,0 +1,13 @@
+[
+    {
+        "key": 0,
+        "title": "What is a group of cats called?",
+        "description": "Select one of the 4 answers bellow.",
+        "question_type": 0,
+        "answers": ["cats", "a group", "some cats", "a clowder"],
+        "correct_answer": "a clowder",
+        "image": "https://images.unsplash.com/photo-1570824104453-508955ab713e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1011&q=80",
+        "difficulty": 5,
+        "topic": "animals"
+    }
+]

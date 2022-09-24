@@ -13,6 +13,7 @@ var nodemailer = require('nodemailer');
 
 const production = false;
 
+
 function upsert(array, item) {
     const i = array.findIndex((_item) => _item.email === item.email);
     if (i > -1) array[i] = item;
@@ -50,7 +51,7 @@ const app = express();
 if (production) {
     app.use(
         cors({
-            origin: ["https://examination.mockbest.com"],
+            origin: ["https://app.mockbest.com"], // examination.mockbest.com (bug fixed)
             methods: ["GET", "POST"],
             credentials: true,
         })
@@ -64,6 +65,7 @@ if (production) {
         })
     );
 }
+
 app.use(express.json());
 //for production
 //if (!production) { //Remove the ! sign after please
@@ -97,7 +99,7 @@ else {
         user: "root", //mockbest_examination
         host: "localhost",
         password: "R5PMQXULWRHYDf8c", //BTLzBfJ7n5eDTtV
-        database: "examination_platform" //mockbest_examination
+        database: "mockbest_examination" //mockbest_examination
     });
 }
 
@@ -160,7 +162,7 @@ app.post('/online-examination/api/google-login', async (req, res) => {
 
                         //Log the login time.
                         db.query(
-                            "UPDATE `examination_platform`.`users` SET `last_logged_in` = ? WHERE (`email` = '" + payload.email + "');", currentTimeStamp(),
+                            "UPDATE `users` SET `last_logged_in` = ? WHERE (`email` = '" + payload.email + "');", currentTimeStamp(),
                             (err, result) => {
                                 if (err) {
                                     console.log(err);
@@ -215,7 +217,7 @@ app.post('/online-examination/api/google-login', async (req, res) => {
 
                                 //Log the login time.
                                 db.query(
-                                    "UPDATE `examination_platform`.`users` SET `last_logged_in` = ? WHERE (`email` = '" + payload.email + "');", currentTimeStamp(),
+                                    "UPDATE `users` SET `last_logged_in` = ? WHERE (`email` = '" + payload.email + "');", currentTimeStamp(),
                                     (err, result) => {
                                         if (err) {
                                             console.log(err);
@@ -345,7 +347,7 @@ app.post("/online-examination/api/reset-password/verification", (req, res) => {
                         }
                         db.query(
                             //"UPDATE `examination_platform`.`users` SET `password` = '" + hash + "', `last_updated` = '" + currentTimeStamp() + "," + "' WHERE (`email` = '" + user.email + "');",
-                            "UPDATE `examination_platform`.`users` SET `password` = '" + hash + "', `last_updated` = '" + currentTimeStamp() + "', `login_type` = '0' WHERE (`email` = '" + user.email + "')",
+                            "UPDATE `users` SET `password` = '" + hash + "', `last_updated` = '" + currentTimeStamp() + "', `login_type` = '0' WHERE (`email` = '" + user.email + "')",
 
                             (err, result) => {
                                 if (err) {
@@ -505,7 +507,7 @@ app.post("/online-examination/api/login", (req, res) => {
 
                             //Log the login time.
                             db.query(
-                                "UPDATE `examination_platform`.`users` SET `last_logged_in` = ? WHERE (`email` = '" + req.body.username + "');", currentTimeStamp(),
+                                "UPDATE `users` SET `last_logged_in` = ? WHERE (`email` = '" + req.body.username + "');", currentTimeStamp(),
                                 (err, result) => {
                                     if (err) {
                                         console.log(err);
@@ -523,6 +525,26 @@ app.post("/online-examination/api/login", (req, res) => {
             }
         }
     )
+});
+
+app.get("/online-examination/api/exams", (req, res) => {
+    if (req.session.user) {
+        db.query(
+            "SELECT * FROM exams",
+            (err, result) => {
+                if (err) {
+                    res.send({ success: false, error: "Database error occured." });
+                }
+
+                if (result) {
+                    if (result.length > 0) {
+                        res.send({success: true, exams: result})
+                    }
+                }
+            })
+    } else {
+        res.send({ success: false, error: "You are not logged in." });
+    }
 });
 
 app.listen(production ? 80 : 3001, () => {
